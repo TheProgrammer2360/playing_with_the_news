@@ -19,5 +19,7 @@ request = requests.get(url=ENDPOINT, params=parameters)
 request.raise_for_status()
 # getting hold of that number of data that we have
 data = request.json()
-print(data["totalResults"])
+# ----------------------------------------- SEND EMAIL  ---------------------------------------------------------------
+# send an email an send keep track of all the title which we in which email was
+
 
