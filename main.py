@@ -1,6 +1,7 @@
 import datetime
 import requests
 from datetime import date
+import smtplib
 import os
 # -------------------------------------------- PARAMETERS -----------------------------------------------------------
 API_KEY = os.getenv("API_KEYS")
@@ -19,7 +20,22 @@ request = requests.get(url=ENDPOINT, params=parameters)
 request.raise_for_status()
 # getting hold of that number of data that we have
 data = request.json()
-# ----------------------------------------- SEND EMAIL  ---------------------------------------------------------------
-# send an email an send keep track of all the title which we in which email was
+# ----------------------------------------- SEND EMAIL WITH ARTICLE -------------------------------------------------
+articles = data["articles"]
+print(articles[0])
+title = articles[0]["title"]
+content = articles[0]["content"]
+url = articles[0]["url"]
 
+from_email = os.getenv("FROM_EMAIL")
+to_email = os.getenv("TO_EMAIL")
 
+# sending email to one user
+# establish a connection with smtp server
+connection = smtplib.SMTP("smtp.gmail.com")
+# secure the connection
+connection.starttls()
+# login with the email you want to send the message via
+connection.login(user=from_email, password=os.getenv("APP_PASSWORD"))
+connection.sendmail(from_addr=from_email, to_addrs=to_email, msg=f"Subject:{title}\n\n{url}")
+connection.close()
