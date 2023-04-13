@@ -37,5 +37,12 @@ connection = smtplib.SMTP("smtp.gmail.com")
 connection.starttls()
 # login with the email you want to send the message via
 connection.login(user=from_email, password=os.getenv("APP_PASSWORD"))
-connection.sendmail(from_addr=from_email, to_addrs=to_email, msg=f"Subject:{title}\n\n{url}")
+# sending emails about all the articles
+for article in articles:
+    try:
+        # sometimes you an error shows up about ascii code cant encode character
+        connection.sendmail(from_addr=from_email, to_addrs=to_email, msg=f"Subject:{article['title']}\n\n{article['url']}")
+        # if this article has been
+    except UnicodeEncodeError:
+        pass
 connection.close()
